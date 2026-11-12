@@ -57,7 +57,7 @@ The applet lives in [`PocketTray@spex/`](PocketTray@spex/), in the layout used
 by Cinnamon Spices. To run a development copy, link it into the applet directory:
 
 ```bash
-git clone https://github.com/Skrrytch/PocketTray.git
+git clone https://github.com/be-spex/PocketTray.git
 ln -s "$PWD/PocketTray/PocketTray@spex/files/PocketTray@spex" \
       ~/.local/share/cinnamon/applets/PocketTray@spex
 ```
