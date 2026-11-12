@@ -7,3 +7,4 @@
 
 # Compiled translations
 *.mo
+dist/

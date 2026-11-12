@@ -12,8 +12,11 @@ const GLib = imports.gi.GLib;
 
 const UUID = "PocketTray@spex";
 
-// Cinnamon installs xlet translations to <user data dir>/locale.
-Gettext.bindtextdomain(UUID, GLib.get_user_data_dir() + "/locale");
+// Cinnamon installs xlet translations from Spices to <user data dir>/locale;
+// the .deb installs the applet below /usr and its translations to /usr/share/locale.
+const meta = imports.ui.appletManager.appletMeta;
+const systemWide = !!(meta && meta[UUID] && String(meta[UUID].path).startsWith("/usr/"));
+Gettext.bindtextdomain(UUID, systemWide ? "/usr/share/locale" : GLib.get_user_data_dir() + "/locale");
 
 function _(text) {
     return Gettext.dgettext(UUID, text);

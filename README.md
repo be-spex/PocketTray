@@ -30,10 +30,15 @@ the icons inside behave exactly as they would in the panel.
 
 ## Installation
 
-PocketTray is meant to be installed from the
-[Cinnamon Spices](https://cinnamon-spices.linuxmint.com/) directory. Until it
-is listed there, install it by hand as described under
-[Development](#development).
+Two ways, both give the same applet:
+
+- **Cinnamon Spices** (per user): *System Settings → Applets → Download*, once
+  PocketTray is listed there. Until then, install it by hand as described under
+  [Development](#development).
+- **Debian package** (system-wide, updated by APT): take `pockettray_<version>_all.deb`
+  from the [latest release](https://github.com/be-spex/PocketTray/releases/latest) and run
+  `sudo apt install ./pockettray_*_all.deb`. A copy from Spices in your home
+  directory takes precedence over the package.
 
 After installing:
 
