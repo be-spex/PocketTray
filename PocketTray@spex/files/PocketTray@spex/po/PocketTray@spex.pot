@@ -117,7 +117,7 @@ msgid "Hover delay before opening"
 msgstr ""
 
 #. settings-schema.json->close-delay->description
-msgid "Delay before closing after the mouse left"
+msgid "Delay before closing after the mouse leaves"
 msgstr ""
 
 #. settings-schema.json->pocket-shortcut->description

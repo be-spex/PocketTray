@@ -75,7 +75,7 @@
         "max": 3000,
         "step": 50,
         "units": "ms",
-        "description": "Delay before closing after the mouse left",
+        "description": "Delay before closing after the mouse leaves",
         "dependency": "open-trigger=hover"
     },
     "pocket-shortcut": {

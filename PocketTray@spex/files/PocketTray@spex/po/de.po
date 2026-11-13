@@ -125,7 +125,7 @@ msgid "Hover delay before opening"
 msgstr "Verzögerung vor dem Öffnen"
 
 #. settings-schema.json->close-delay->description
-msgid "Delay before closing after the mouse left"
+msgid "Delay before closing after the mouse leaves"
 msgstr ""
 "Verzögerung vor dem Schließen, nachdem die Maus die Tasche verlassen hat"
 
