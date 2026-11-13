@@ -2,14 +2,45 @@
 
 **A system tray with a pocket for the icons you rarely need.**
 
-Cinnamon's panel fills up with tray icons: updaters, screenshot tools, sync
-clients, chat apps. PocketTray keeps the ones you use every day in the panel
-and tucks the rest into a small pocket. One click (or a hover) opens it, and
-the icons inside behave exactly as they would in the panel.
+Cinnamon's panel fills up with tray icons: updaters, screenshot tools, sync clients, chat apps. PocketTray
+keeps the ones you use every day in the panel and tucks the rest into a small pocket that opens with a
+click. The icons inside behave exactly as they would in the panel.
 
-![PocketTray: the context menu with one switch per icon, and the panel with the pocket button](PocketTray@spex/screenshot.png)
+PocketTray is an applet for the Cinnamon desktop (Linux Mint) only.
 
-*Left: the pocket open above the panel. Right: the menu that decides which icon goes where, with one switch per icon.*
+**Website:** https://be-spex.github.io/pockettray/ · part of [be spex](https://be-spex.github.io) – small, focused apps for Linux
+
+![PocketTray: the pocket open above the panel, and the menu with one switch per tray icon](PocketTray@spex/screenshot.png)
+
+## Install
+
+### With APT (Debian, Ubuntu, Linux Mint)
+
+Once, add the be spex repository:
+
+```sh
+curl -fsSLO https://be-spex.github.io/packages/be-spex-archive-keyring.deb
+sudo apt install ./be-spex-archive-keyring.deb && sudo apt update
+```
+
+Then:
+
+```sh
+sudo apt install pockettray
+```
+
+Updates arrive with `sudo apt upgrade`. The package installs the applet system-wide.
+
+### Other ways
+
+- **Cinnamon Spices** (per user): *System Settings → Applets → Download*, once PocketTray is listed there.
+  A copy from Spices in your home directory takes precedence over the package.
+- **.deb directly:** take `pockettray_*_all.deb` from the
+  [latest release](https://github.com/be-spex/PocketTray/releases/latest) and run
+  `sudo apt install ./pockettray_*_all.deb`.
+- **By hand:** see [Development](#development).
+
+Requirements: Cinnamon; developed and tested on Linux Mint 22.3 with Cinnamon 6.6.9 on a horizontal panel.
 
 ## Features
 
@@ -28,33 +59,16 @@ the icons inside behave exactly as they would in the panel.
   changes its picture or label, for example on a new message. Off by default.
 - **Available in German**, with English as the base language.
 
-## Installation
+## Usage
 
-Two ways, both give the same applet:
-
-- **Cinnamon Spices** (per user): *System Settings → Applets → Download*, once
-  PocketTray is listed there. Until then, install it by hand as described under
-  [Development](#development).
-- **Debian package** (system-wide, updated by APT): take `pockettray_<version>_all.deb`
-  from the [latest release](https://github.com/be-spex/PocketTray/releases/latest) and run
-  `sudo apt install ./pockettray_*_all.deb`. A copy from Spices in your home
-  directory takes precedence over the package.
-
-After installing:
-
-1. Remove *System Tray* and *XApp Status Applet* from the panel. If one of
-   them is still there, PocketTray removes itself and shows a notification
-   instead of displaying icons twice.
+1. Remove *System Tray* and *XApp Status Applet* from the panel. If one of them is still there, PocketTray
+   removes itself and shows a notification instead of displaying icons twice.
 2. Add *PocketTray* to the panel.
-3. Right-click it and switch the icons you want to keep out of the pocket.
+3. Right-click it and switch each icon: on keeps it in the panel, off puts it into the pocket.
+4. Click (or hover) the pocket button to open the pocket. It only appears when the pocket holds an icon.
 
-Usage details and all settings are described in the
+All settings and how icons are identified are described in the
 [applet README](PocketTray@spex/README.md).
-
-## Compatibility
-
-Developed and tested on Linux Mint 22.3 with Cinnamon 6.6.9 on a horizontal
-panel.
 
 ## Development
 
@@ -107,7 +121,7 @@ size, so an edit that keeps the size unchanged needs a Cinnamon restart).
 `require()` is deprecated as of Cinnamon 6.8; switch to its replacement once
 that version can be tested.
 
-## Credits and license
+## License
 
 Based on `systray@cinnamon.org` and `xapp-status@cinnamon.org` from
 [linuxmint/cinnamon](https://github.com/linuxmint/cinnamon), licensed under
