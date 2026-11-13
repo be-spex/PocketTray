@@ -39,7 +39,7 @@ Section: x11
 Priority: optional
 Homepage: https://github.com/be-spex/PocketTray
 Installed-Size: $(du -sk "$ROOT/usr" | cut -f1)
-Description: Cinnamon system tray with a pocket for rarely used icons
+Description: System tray with a pocket for rarely used icons – by be-spex
  PocketTray keeps the tray icons you use every day in the panel and tucks
  the rest into a small pocket. Works with legacy (XEmbed) and modern
  (XApp/StatusNotifier) icons. After installing, add PocketTray to the panel

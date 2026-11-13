@@ -1,8 +1,8 @@
 {
     "uuid": "PocketTray@spex",
     "name": "PocketTray",
-    "description": "System tray with a pocket: tuck away the tray icons you rarely need and keep the panel tidy. Works with legacy and modern (XApp/StatusNotifier) icons.",
-    "version": "0.2.0",
+    "description": "System tray with a pocket for rarely used icons – by be-spex",
+    "version": "0.2.1",
     "role": "tray",
     "max-instances": 1,
     "author": "spex"

@@ -47,9 +47,7 @@ msgid "PocketTray"
 msgstr ""
 
 #. metadata.json->description
-msgid ""
-"System tray with a pocket: tuck away the tray icons you rarely need and keep"
-" the panel tidy. Works with legacy and modern (XApp/StatusNotifier) icons."
+msgid "System tray with a pocket for rarely used icons – by be-spex"
 msgstr ""
 
 #. settings-schema.json->page-pocket->title

@@ -4,6 +4,10 @@ Versionen beschreiben das Applet, wie es im Spices-Verzeichnis erscheint.
 Die Beschreibung von 0.1.0 ist die README der Spices-PR; 0.2.0 ist der
 Nachtrag, der bei der nächsten Einreichung dazukommt.
 
+## 0.2.1 (noch nicht veröffentlicht)
+
+- Kurzbeschreibung vereinheitlicht: „System tray with a pocket for rarely used icons – by be-spex“.
+
 ## 0.2.0 (noch nicht veröffentlicht)
 
 ### Neu
