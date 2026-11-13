@@ -34,12 +34,17 @@ const XApp = imports.gi.XApp;
 const Main = imports.ui.main;
 const Tooltips = imports.ui.tooltips;
 
-const SNI_NAME = /^org\.freedesktop\.statusnotifieritem-(\d+)-\d+$/;
+const { isVolatileId } = require('./lib/hiddenList');
+
+// Volatile names (see isVolatileId in hiddenList.js), by where the process
+// id comes from: StatusNotifierItems without an id carry it in the name,
+// for a unique D-Bus connection name the bus knows it.
+const SNI_NAME = /^org\.(?:freedesktop|kde)\.statusnotifieritem-(\d+)-\d+$/i;
+const BUS_NAME = /^:\d+\.\d+$/;
 
 // Lower-case identifier from the proxy name: "org.x.StatusIcon.<name>" and
-// plain names -> <name>. StatusNotifierItems without an id are named
-// "org.freedesktop.statusnotifieritem-<pid>-<n>"; for those the process name
-// is looked up asynchronously, see XAppStatusIcon._resolveProcessName().
+// plain names -> <name>. For the volatile names above the process name is
+// looked up asynchronously, see XAppStatusIcon._resolveProcessName().
 function getProxyId(proxy) {
     return (proxy.name || "").replace(/^org\.x\.StatusIcon\./, "").toLowerCase();
 }
@@ -110,7 +115,7 @@ class XAppStatusIcon {
         this.proxy = proxy;
         this.id = getProxyId(proxy);
         // Unnamed StatusNotifierItem: id becomes the process name
-        this.anonymous = SNI_NAME.test(proxy.name || "");
+        this.anonymous = isVolatileId(getProxyId(proxy));
         this._cancellable = new Gio.Cancellable();
         this._quietUntil = 0;
         this._resolveProcessName();
@@ -169,7 +174,7 @@ class XAppStatusIcon {
         }
         if ('Name' in prop_names) {
             this.id = getProxyId(proxy);
-            this.anonymous = SNI_NAME.test(proxy.name || "");
+            this.anonymous = isVolatileId(getProxyId(proxy));
             this._resolveProcessName();
             this._host.onIconChanged(this);
         }
@@ -177,20 +182,40 @@ class XAppStatusIcon {
         if ('SecondaryMenuIsOpen' in prop_names && !proxy.secondary_menu_is_open) this.actor.sync_hover();
     }
 
-    // True while the id of an unnamed StatusNotifierItem is still the raw
-    // "org.freedesktop.statusnotifieritem-<pid>-<n>" (process name not known
-    // yet, or the process is gone). Such ids change with every start.
+    // True while the id of an unnamed StatusNotifierItem is still its raw,
+    // volatile name (process name not known yet, or the process is gone).
+    // Such ids change with every start and must not be remembered.
     get idIsProvisional() {
         return this.anonymous && this.id === getProxyId(this.proxy);
     }
 
-    // For unnamed StatusNotifierItems read /proc/<pid>/comm without
-    // blocking, then let the host re-sort the icon under its new id.
+    // For unnamed StatusNotifierItems find the process and read
+    // /proc/<pid>/comm without blocking, then let the host re-sort the icon
+    // under its new id.
     _resolveProcessName() {
-        const m = (this.proxy.name || "").match(SNI_NAME);
-        if (!m) return;
+        const name = getProxyId(this.proxy);
+        const m = name.match(SNI_NAME);
+        if (m) {
+            this._readProcessName(m[1]);
+        } else if (BUS_NAME.test(name)) {
+            // Only the connection is known: ask the bus for its process.
+            Gio.DBus.session.call(
+                "org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus",
+                "GetConnectionUnixProcessID", new GLib.Variant("(s)", [name]),
+                new GLib.VariantType("(u)"), Gio.DBusCallFlags.NONE, -1, this._cancellable,
+                (bus, res) => {
+                    try {
+                        const [pid] = bus.call_finish(res).deep_unpack();
+                        this._readProcessName(pid);
+                    } catch (e) {
+                        // cancelled or connection already gone: keep the raw name
+                    }
+                });
+        }
+    }
 
-        Gio.File.new_for_path("/proc/" + m[1] + "/comm").load_contents_async(this._cancellable, (file, res) => {
+    _readProcessName(pid) {
+        Gio.File.new_for_path("/proc/" + pid + "/comm").load_contents_async(this._cancellable, (file, res) => {
             try {
                 const [ok, bytes] = file.load_contents_finish(res);
                 const comm = ok ? new TextDecoder().decode(bytes).trim().toLowerCase() : "";

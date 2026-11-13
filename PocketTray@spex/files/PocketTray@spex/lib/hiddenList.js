@@ -18,6 +18,18 @@ function normalizeId(id) {
     return String(id || "").trim().toLowerCase();
 }
 
+// Ids that say nothing about the application and change with every start:
+// "org.freedesktop.statusnotifieritem-<pid>-<n>" and its "org.kde." twin
+// (StatusNotifierItems without an id) and ":1.234" (a unique D-Bus
+// connection name). An icon is listed under such an id only until its
+// process name is known; storing one is useless, and a later application
+// could even get the same id by chance.
+const VOLATILE_ID = /^(?:org\.(?:freedesktop|kde)\.statusnotifieritem-\d+-\d+|:\d+\.\d+)$/;
+
+function isVolatileId(id) {
+    return VOLATILE_ID.test(normalizeId(id));
+}
+
 class HiddenList {
     // settings:  the applet's AppletSettings
     // onChanged: called after every change of the list, whether it was made
@@ -31,6 +43,21 @@ class HiddenList {
         settings.bindWithObject(this, "hidden-apps", "_entries", () => this._onChanged());
         settings.bindWithObject(this, "known-apps", "_known");
         settings.bindWithObject(this, "hide-new-icons", "hideNew");
+        this._dropVolatileIds();
+    }
+
+    // Earlier versions stored volatile ids (see isVolatileId) of Qt/KDE and
+    // Electron applications, a new one with every start. They can never
+    // match again; remove them once.
+    _dropVolatileIds() {
+        const entries = (this._entries || []).filter((entry) => entry && !isVolatileId(entry.name));
+        if (entries.length !== (this._entries || []).length) {
+            this._entries = entries;   // saves the setting
+        }
+        const known = (this._known || []).filter((id) => !isVolatileId(id));
+        if (known.length !== (this._known || []).length) {
+            this._known = known;       // saves the setting
+        }
     }
 
     // Called for every icon placed in panel or pocket. Remembers ids seen for
@@ -40,7 +67,7 @@ class HiddenList {
     noticeIcon(id) {
         const wanted = normalizeId(id);
         const known = this._known || [];
-        if (!wanted || known.includes(wanted)) return;
+        if (!wanted || isVolatileId(wanted) || known.includes(wanted)) return;
 
         this._known = known.concat([wanted]);   // saves the setting
         if (this.hideNew && !this.has(wanted)) {
@@ -76,4 +103,4 @@ class HiddenList {
     }
 }
 
-module.exports = { HiddenList, normalizeId };
+module.exports = { HiddenList, normalizeId, isVolatileId };

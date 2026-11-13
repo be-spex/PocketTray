@@ -32,6 +32,14 @@ Nachtrag, der bei der nächsten Einreichung dazukommt.
 - **Einstellungen in drei Reitern**: Tasche, Taschen-Button, Icons. Die
   Verzögerungen erscheinen nur, wenn die Tasche per Überfahren öffnet.
 
+### Korrekturen
+- **Liste der versteckten Icons wuchs von selbst**: Programme ohne eigenen
+  Icon-Namen (Qt/KDE- und Electron-Programme) melden sich mit einer Kennung,
+  die bei jedem Start anders ist (`org.kde.statusnotifieritem-<pid>-<n>` oder
+  `:1.234`). Mit „Neue Icons in die Tasche“ kam so bei jedem Start ein
+  nutzloser Eintrag dazu. Solche Icons werden jetzt über den Namen ihres
+  Programms erkannt; die alten Einträge werden einmalig entfernt.
+
 ### Intern
 - Übersetzung (Deutsch) für alle neuen Texte.
 
