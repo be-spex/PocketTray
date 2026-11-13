@@ -10,7 +10,10 @@ PocketTray is an applet for the Cinnamon desktop (Linux Mint) only.
 
 **Website:** https://be-spex.github.io/pockettray/ · part of [be spex](https://be-spex.github.io) – small, focused apps for Linux
 
-![PocketTray: the pocket open above the panel, and the menu with one switch per tray icon](PocketTray@spex/screenshot.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/pockettray-dark.png">
+  <img src="docs/images/pockettray-light.png" width="700" alt="PocketTray: the pocket open above the panel, and the menu with one switch per tray icon">
+</picture>
 
 ## Install
 
@@ -84,6 +87,8 @@ ln -s "$PWD/PocketTray/PocketTray@spex/files/PocketTray@spex" \
 - Reload after code changes:
   `dbus-send --session --dest=org.Cinnamon --type=method_call /org/Cinnamon org.Cinnamon.ReloadXlet string:'PocketTray@spex' string:'APPLET'`
 - Logs: Looking Glass (`Alt+F2`, `lg`) or `~/.xsession-errors`, lines start with `PocketTray:`
+- Screenshot: `tools/screenshot/shoot.sh` takes it in English, light and dark, in a second Cinnamon on an
+  invisible display; the running desktop is not touched
 - Translations: `cinnamon-xlet-makepot PocketTray@spex/files/PocketTray@spex` updates the
   template, `cinnamon-xlet-makepot -i PocketTray@spex/files/PocketTray@spex` installs the
   `.po` files locally
